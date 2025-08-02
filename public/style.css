@@ -1,0 +1,143 @@
+/* === Reset básico y base === */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* === Layout principal === */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page__header,
+.page__footer {
+  background-color: #222;
+  color: #fff;
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+.page__main {
+  flex: 1;
+  padding: 2rem 3rem;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* === Header === */
+.header__title {
+  margin: 0 0 0.3rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.header__subtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #bbb;
+  font-weight: 400;
+}
+
+/* === Sections === */
+.section {
+  margin-bottom: 3rem;
+}
+
+.section--intro {
+  background-color: #e0f7fa;
+  border-left: 6px solid #0097a7;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+}
+
+.section__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #00796b;
+  font-weight: 600;
+}
+
+.section__subtitle {
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #004d40;
+  font-weight: 600;
+}
+
+.section__text {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+/* === Listas === */
+.section__list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.section__item {
+  background: #fff;
+  margin-bottom: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-left: 5px solid #00796b;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+/* Código inline */
+code {
+  background-color: #eee;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+}
+
+/* === Footer === */
+.footer__text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #999;
+}
+
+/* === Scroll para main (por si hay mucho contenido) === */
+.page__main {
+  overflow-y: auto;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .page__main {
+    padding: 1rem 1.5rem;
+  }
+
+  .header__title {
+    font-size: 1.8rem;
+  }
+
+  .section__title {
+    font-size: 1.5rem;
+  }
+
+  .section__subtitle {
+    font-size: 1.1rem;
+  }
+}

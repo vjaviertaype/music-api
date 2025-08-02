@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music API - Documentación</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="page">
+    <header class="page__header header">
+      <h1 class="header__title">Music API</h1>
+      <p class="header__subtitle">
+        Accedé a artistas, álbumes y canciones con Music API.
+      </p>
+    </header>
+
+    <main class="page__main main-content">
+      <!-- Intro -->
+      <section
+        class="main-content__section section section--intro"
+        aria-labelledby="intro-title"
+      >
+        <h2 id="intro-title" class="section__title">¿Qué es la Music API?</h2>
+        <p class="section__text">
+          La <strong>Music API</strong> te permite buscar artistas, ver sus
+          álbumes y canciones, y suscribirte para recibir notificaciones sobre
+          nuevos lanzamientos.
+        </p>
+      </section>
+
+      <!-- Entidades -->
+      <section
+        class="main-content__section section"
+        aria-labelledby="entidades-title"
+      >
+        <h2 id="entidades-title" class="section__title">Entidades de la API</h2>
+
+        <p class="section__text">
+          La API está estructurada en entidades relacionadas con la industria
+          musical y la gestión de usuarios.
+        </p>
+
+        <article class="section__entity" aria-labelledby="usuario-title">
+          <h3 id="usuario-title" class="section__subtitle">Usuario</h3>
+          <p class="section__text">
+            Representa a una persona registrada en el sistema, identificada
+            mediante un correo electrónico y utilizada para gestionar
+            preferencias y suscripciones.
+          </p>
+        </article>
+
+        <article class="section__entity" aria-labelledby="artista-title">
+          <h3 id="artista-title" class="section__subtitle">Artista</h3>
+          <p class="section__text">
+            Representa a un creador musical y contiene su información básica.
+          </p>
+        </article>
+
+        <article class="section__entity" aria-labelledby="album-title">
+          <h3 id="album-title" class="section__subtitle">Álbum</h3>
+          <p class="section__text">
+            Agrupa un conjunto de canciones publicadas por un artista en una
+            fecha determinada.
+          </p>
+        </article>
+
+        <article class="section__entity" aria-labelledby="cancion-title">
+          <h3 id="cancion-title" class="section__subtitle">Canción</h3>
+          <p class="section__text">
+            Describe una obra musical individual, incluyendo su título, duración
+            y metadatos asociados.
+          </p>
+        </article>
+
+        <article class="section__entity" aria-labelledby="suscripcion-title">
+          <h3 id="suscripcion-title" class="section__subtitle">Suscripción</h3>
+          <p class="section__text">
+            Permite registrar el interés de un usuario en recibir notificaciones
+            sobre futuras publicaciones asociadas a uno o varios artistas.
+          </p>
+        </article>
+      </section>
+
+      <!-- Endpoints -->
+      <section
+        class="main-content__section section"
+        aria-labelledby="endpoints-title"
+      >
+        <h2 id="endpoints-title" class="section__title">
+          Endpoints clásicos de la API
+        </h2>
+
+        <p class="section__text">
+          La API expone los siguientes endpoints REST bajo el prefijo
+          <code>/api</code>, siguiendo las convenciones típicas generadas por
+          NestJS para cada entidad:
+        </p>
+
+        <article
+          class="section__entity"
+          aria-labelledby="usuario-endpoints-title"
+        >
+          <h3 id="usuario-endpoints-title" class="section__subtitle">
+            Usuario
+          </h3>
+          <ul class="section__list">
+            <li class="section__item">
+              <code>GET /api/users</code> — Obtener todos los usuarios
+            </li>
+            <li class="section__item">
+              <code>GET /api/users/:id</code> — Obtener un usuario por ID
+            </li>
+            <li class="section__item">
+              <code>POST /api/users</code> — Crear un nuevo usuario
+            </li>
+            <li class="section__item">
+              <code>PATCH /api/users/:id</code> — Actualizar parcialmente un
+              usuario
+            </li>
+            <li class="section__item">
+              <code>DELETE /api/users/:id</code> — Eliminar un usuario
+            </li>
+          </ul>
+        </article>
+
+        <article
+          class="section__entity"
+          aria-labelledby="artista-endpoints-title"
+        >
+          <h3 id="artista-endpoints-title" class="section__subtitle">
+            Artista
+          </h3>
+          <ul class="section__list">
+            <li class="section__item">
+              <code>GET /api/artists</code> — Obtener todos los artistas
+            </li>
+            <li class="section__item">
+              <code>GET /api/artists/:id</code> — Obtener un artista por ID
+            </li>
+            <li class="section__item">
+              <code>POST /api/artists</code> — Crear un nuevo artista
+            </li>
+            <li class="section__item">
+              <code>PATCH /api/artists/:id</code> — Actualizar un artista
+            </li>
+            <li class="section__item">
+              <code>DELETE /api/artists/:id</code> — Eliminar un artista
+            </li>
+          </ul>
+        </article>
+
+        <article
+          class="section__entity"
+          aria-labelledby="album-endpoints-title"
+        >
+          <h3 id="album-endpoints-title" class="section__subtitle">Álbum</h3>
+          <ul class="section__list">
+            <li class="section__item">
+              <code>GET /api/albums</code> — Obtener todos los álbumes
+            </li>
+            <li class="section__item">
+              <code>GET /api/albums/:id</code> — Obtener un álbum por ID
+            </li>
+            <li class="section__item">
+              <code>POST /api/albums</code> — Crear un nuevo álbum
+            </li>
+            <li class="section__item">
+              <code>PATCH /api/albums/:id</code> — Actualizar un álbum
+            </li>
+            <li class="section__item">
+              <code>DELETE /api/albums/:id</code> — Eliminar un álbum
+            </li>
+          </ul>
+        </article>
+
+        <article
+          class="section__entity"
+          aria-labelledby="cancion-endpoints-title"
+        >
+          <h3 id="cancion-endpoints-title" class="section__subtitle">
+            Canción
+          </h3>
+          <ul class="section__list">
+            <li class="section__item">
+              <code>GET /api/songs</code> — Obtener todas las canciones
+            </li>
+            <li class="section__item">
+              <code>GET /api/songs/:id</code> — Obtener una canción por ID
+            </li>
+            <li class="section__item">
+              <code>POST /api/songs</code> — Crear una nueva canción
+            </li>
+            <li class="section__item">
+              <code>PATCH /api/songs/:id</code> — Actualizar una canción
+            </li>
+            <li class="section__item">
+              <code>DELETE /api/songs/:id</code> — Eliminar una canción
+            </li>
+          </ul>
+        </article>
+
+        <article
+          class="section__entity"
+          aria-labelledby="suscripcion-endpoints-title"
+        >
+          <h3 id="suscripcion-endpoints-title" class="section__subtitle">
+            Suscripción
+          </h3>
+          <ul class="section__list">
+            <li class="section__item">
+              <code>GET /api/subscriptions</code> — Obtener todas las
+              suscripciones
+            </li>
+            <li class="section__item">
+              <code>GET /api/subscriptions/:id</code> — Obtener una suscripción
+              por ID
+            </li>
+            <li class="section__item">
+              <code>POST /api/subscriptions</code> — Crear una nueva suscripción
+            </li>
+            <li class="section__item">
+              <code>PATCH /api/subscriptions/:id</code> — Actualizar una
+              suscripción
+            </li>
+            <li class="section__item">
+              <code>DELETE /api/subscriptions/:id</code> — Eliminar una
+              suscripción
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer class="page__footer footer">
+      <p class="footer__text">© 2025 API Music - Hecho por Victor Javier</p>
+    </footer>
+  </body>
+</html>

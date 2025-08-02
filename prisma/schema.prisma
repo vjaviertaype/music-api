@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ARTIST
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones condicionales por rol
+  albums        Album[]        @relation("ArtistAlbums") // Solo si es ARTIST
+  subscriptions Subscription[] @relation("UserSubscriptions") // Solo si es USER
+  followers     Subscription[] @relation("ArtistFollowers") // Solo si es ARTIST
+  notifications Notification[]
+}
+
+model Album {
+  id        String   @id @default(uuid())
+  title     String
+  artistId  String
+  isSingle  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artist User   @relation(name: "ArtistAlbums", fields: [artistId], references: [id])
+  songs  Song[]
+}
+
+model Song {
+  id        String   @id @default(uuid())
+  title     String
+  duration  Int // en segundos
+  albumId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  album Album @relation(fields: [albumId], references: [id])
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String
+  artistId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User @relation(name: "UserSubscriptions", fields: [userId], references: [id])
+  artist User @relation(name: "ArtistFollowers", fields: [artistId], references: [id])
+
+  @@unique([userId, artistId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id])
+}
