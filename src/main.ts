@@ -2,9 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
-import { AllExceptionsFilter } from './common/all-exceptions.filter';
 import { ValidationPipe } from '@nestjs/common';
-import { AppLogger } from 'common/logger/logger.service';
+import { CustomLoggerService } from 'common/custom-logger.service';
+import { AllExceptionsFilter } from 'common/filters/all-exceptions.filter';
+import { PrismaExceptionFilter } from 'prisma/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -13,8 +14,14 @@ async function bootstrap() {
   app.setGlobalPrefix('api', { exclude: ['/'] });
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  const logger = new AppLogger();
+  const logger = app.get(CustomLoggerService);
+
   app.useLogger(logger);
+
+  app.useGlobalFilters(
+    new AllExceptionsFilter(logger),
+    new PrismaExceptionFilter(logger),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -26,8 +33,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(process.env.PORT ?? 3000);
 }

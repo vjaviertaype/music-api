@@ -3,58 +3,70 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 
-import { RegisterDto } from './dto/register.dto';
+import { UserService } from 'user/user.service';
 import { LoginDto } from './dto/login.dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { RegisterDto } from './dto/register.dto';
+import { AccessTokenResponseDto } from './dto/access-token-response.dto';
+import { User } from '@prisma/client';
+import { compare, hash } from './utils/encrypt.util';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
+    private readonly user: UserService,
+    private readonly jwt: JwtService,
   ) {}
 
-  async register(dto: RegisterDto) {
-    const { email, password, confirmPassword } = dto;
+  async signIn(data: LoginDto): Promise<AccessTokenResponseDto> {
+    const { email, password } = data;
 
-    if (password !== confirmPassword) {
-      throw new BadRequestException('Las contraseñas no coinciden');
-    }
-
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email },
-    });
-    if (existingUser) {
-      throw new BadRequestException('El usuario ya existe');
-    }
-
-    const hash = await bcrypt.hash(password, 10);
-
-    const user = await this.prisma.user.create({
-      data: { email, password: hash },
+    const user = await this.user.findOne({
+      uniqueFilter: { email },
+      fields: { password: true },
     });
 
-    return this.generateToken(user.id, user.email);
-  }
+    if (!user?.password)
+      throw new BadRequestException('el campo "password" esta vacio');
 
-  async login(dto: LoginDto) {
-    const { email, password } = dto;
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const isMatch = compare(password, user.password);
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('Credenciales inválidas');
+    if (!isMatch) {
+      throw new UnauthorizedException('"password" incorrecta');
     }
 
-    return this.generateToken(user.id, user.email);
+    return await this.generateToken(user);
   }
 
-  private generateToken(userId: string, email: string) {
-    const payload = { sub: userId, email };
+  async signUp(data: RegisterDto): Promise<AccessTokenResponseDto> {
+    const { email, password } = data;
+
+    const existingUser = await this.user.findOne({
+      uniqueFilter: { email },
+    });
+
+    if (existingUser) throw new BadRequestException('el email ya está en uso');
+
+    const hashedPassword = await hash(password);
+
+    const newUser = await this.user.create({
+      ...data,
+      password: hashedPassword,
+    });
+
+    return await this.generateToken(newUser);
+  }
+
+  private async generateToken(data: User): Promise<AccessTokenResponseDto> {
+    const { id, email, role } = data;
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: await this.jwt.signAsync({
+        sub: id,
+        email: email,
+        role: role,
+      }),
     };
   }
 }
