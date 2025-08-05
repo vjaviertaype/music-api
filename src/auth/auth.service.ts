@@ -24,8 +24,8 @@ export class AuthService {
     const { email, password } = data;
 
     const user = await this.user.findOne({
-      uniqueFilter: { email },
-      fields: { password: true },
+      where: { email },
+      omit: { password: true },
     });
 
     if (!user?.password)
@@ -49,7 +49,8 @@ export class AuthService {
       );
 
     const existingUser = await this.user.findOne({
-      uniqueFilter: { email },
+      where: { email },
+      omit: { password: true },
     });
 
     if (existingUser) throw new BadRequestException('el email ya está en uso');

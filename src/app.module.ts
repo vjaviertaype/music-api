@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'auth/guards/auth.guard';
 import { RolesGuard } from 'auth/guards/roles.guard';
 import { AlbumModule } from './album/album.module';
+import { SongModule } from './song/song.module';
 
 @Module({
   controllers: [AppController],
@@ -22,7 +23,7 @@ import { AlbumModule } from './album/album.module';
       useClass: RolesGuard,
     },
   ],
-  imports: [PrismaModule, CommonModule, UserModule, AuthModule, AlbumModule],
+  imports: [PrismaModule, CommonModule, UserModule, AuthModule, AlbumModule, SongModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

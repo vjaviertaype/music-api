@@ -22,8 +22,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  albums Album[] // Solo si es ARTIST
+  Songs  Song[]
+
   // Relaciones condicionales por rol
-  albums Album[] @relation("ArtistAlbums") // Solo si es ARTIST
   //subscriptions Subscription[] @relation("UserSubscriptions") // Solo si es USER
   //followers     Subscription[] @relation("ArtistFollowers") // Solo si es ARTIST
   //notifications Notification[]
@@ -37,8 +39,8 @@ model Album {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  artist User   @relation(name: "ArtistAlbums", fields: [artistId], references: [id])
-  songs  Song[]
+  artist User   @relation(fields: [artistId], references: [id])
+  Song   Song[]
 }
 
 model Song {
@@ -46,10 +48,12 @@ model Song {
   title     String
   duration  Int // en segundos
   albumId   String
+  artistId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  album Album @relation(fields: [albumId], references: [id])
+  album  Album @relation(fields: [albumId], references: [id])
+  artist User  @relation(fields: [artistId], references: [id])
 }
 
 // model Subscription {

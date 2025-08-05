@@ -3,19 +3,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FindAllUsersDto } from './dto/find-all-user.dto';
-import {
-  buildUserFindManyArgs,
-  buildUserFindUniqueArgs,
-  buildUserSelect,
-} from './user.utils';
-import { findOneUserDto } from './dto/find-one-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { compare, hash } from 'auth/utils/encrypt.util';
 
@@ -27,17 +18,19 @@ export class UserService {
     return await this.prisma.user.create({ data });
   }
 
-  async findAll(filter: FindAllUsersDto): Promise<Omit<User, 'password'>[]> {
-    return await this.prisma.user.findMany(buildUserFindManyArgs(filter));
+  async findAll(
+    filter: Prisma.UserFindManyArgs,
+  ): Promise<Omit<User, 'password'>[]> {
+    return await this.prisma.user.findMany(filter);
   }
 
-  async findOne(filter: findOneUserDto): Promise<User | null> {
-    return await this.prisma.user.findUnique(buildUserFindUniqueArgs(filter));
+  async findOne(filter: Prisma.UserFindUniqueArgs): Promise<User | null> {
+    return await this.prisma.user.findUnique(filter);
   }
 
   async update(id: string, data: UpdateUserDto) {
     return await this.prisma.user.update({
-      select: buildUserSelect(),
+      omit: { password: true },
       where: { id },
       data,
     });
@@ -46,7 +39,7 @@ export class UserService {
   async updatePassword(id: string, data: UpdatePasswordDto) {
     const { currentPassword, newPassword } = data;
 
-    const user = await this.findOne({ uniqueFilter: { id } });
+    const user = await this.findOne({ where: { id } });
 
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
@@ -66,7 +59,7 @@ export class UserService {
     return { message: 'Contraseña actualizada correctamente' };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return await this.prisma.user.delete({ where: { id } });
   }
 }
