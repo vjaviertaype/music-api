@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsEmail, IsOptional, IsUUID, ValidateNested } from 'class-validator';
-import { RelationsDto } from './relations.dto';
-import { FieldsDto } from './fields.dto';
+import { RelationsUserDto } from './relations-user.dto';
+import { FieldsUserDto } from './fields-user.dto';
 
 class UniqueFilterDto {
   @IsOptional()
@@ -26,11 +26,11 @@ export class findOneUserDto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => RelationsDto)
-  relations?: RelationsDto;
+  @Type(() => RelationsUserDto)
+  relations?: RelationsUserDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => FieldsDto)
-  fields?: FieldsDto;
+  @Type(() => FieldsUserDto)
+  fields?: FieldsUserDto;
 }

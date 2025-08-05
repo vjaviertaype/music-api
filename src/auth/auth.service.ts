@@ -9,8 +9,9 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { AccessTokenResponseDto } from './dto/access-token-response.dto';
-import { User } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { compare, hash } from './utils/encrypt.util';
+import { JwtUser } from './interfaces/user-request.interface';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,12 @@ export class AuthService {
   }
 
   async signUp(data: RegisterDto): Promise<AccessTokenResponseDto> {
-    const { email, password } = data;
+    const { email, password, role } = data;
+
+    if (role === Role.ADMIN)
+      throw new UnauthorizedException(
+        'No esta autorizado crear usuarios administradores desde este enlace',
+      );
 
     const existingUser = await this.user.findOne({
       uniqueFilter: { email },
@@ -58,14 +64,14 @@ export class AuthService {
     return await this.generateToken(newUser);
   }
 
-  private async generateToken(data: User): Promise<AccessTokenResponseDto> {
+  private async generateToken(data: JwtUser): Promise<AccessTokenResponseDto> {
     const { id, email, role } = data;
 
     return {
       access_token: await this.jwt.signAsync({
-        sub: id,
-        email: email,
-        role: role,
+        id,
+        email,
+        role,
       }),
     };
   }

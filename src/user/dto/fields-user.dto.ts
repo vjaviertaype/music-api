@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
-export class FieldsDto {
+export class FieldsUserDto {
   @IsBoolean({ message: 'El campo "id" debe ser booleano.' })
   @Type(() => Boolean)
   id?: boolean = true;

@@ -1,46 +1,41 @@
 import { Type } from 'class-transformer';
 import {
   IsOptional,
-  IsEmail,
+  IsUUID,
   IsString,
   IsBoolean,
   IsDate,
-  IsInt,
   IsIn,
+  IsInt,
   Min,
   ValidateNested,
-  IsUUID,
 } from 'class-validator';
-import { RelationsUserDto } from './relations-user.dto';
-import { FieldsUserDto } from './fields-user.dto';
+import { RelationsAlbumDto } from './relations-album.dto';
+import { FieldsAlbumDto } from './fields-album.dto';
 
-export class FindAllUsersDto {
+export class FindAllAlbumDto {
   @IsOptional()
   @IsUUID('4', {
-    message: 'El campo "id" debe tener un fromato válido de UUID v4',
+    message: 'El campo "id" debe tener un formato válido de UUID v4.',
   })
   id?: string;
 
   @IsOptional()
-  @IsEmail(
-    {},
-    {
-      message:
-        'El campo "email" debe tener un formato válido de correo electrónico.',
-    },
-  )
-  email?: string;
+  @IsUUID('4', {
+    message: 'El campo "artistId" debe tener un formato válido de UUID v4.',
+  })
+  artistId?: string;
 
   @IsOptional()
-  @IsString({ message: 'El campo "name" debe ser una cadena de texto.' })
-  name?: string;
+  @IsString({ message: 'El campo "title" debe ser una cadena de texto.' })
+  title?: string;
 
   @IsOptional()
   @IsBoolean({
-    message: 'El campo "isActive" debe ser true o false (booleano).',
+    message: 'El campo "isSingle" debe ser true o false (booleano).',
   })
   @Type(() => Boolean)
-  isActive?: boolean;
+  isSingle?: boolean;
 
   @IsOptional()
   @IsDate({
@@ -72,10 +67,11 @@ export class FindAllUsersDto {
   @Type(() => Number)
   take: number = 10;
 
-  @IsIn(['createdAt', 'email'], {
-    message: 'El campo "orderBy" solo puede ser "createdAt" o "email".',
+  @IsIn(['createdAt', 'updatedAt', 'title'], {
+    message:
+      'El campo "orderBy" solo puede ser "createdAt", "updatedAt" o "title".',
   })
-  orderBy: 'createdAt' | 'email' = 'createdAt';
+  orderBy: 'createdAt' | 'updatedAt' | 'title' = 'createdAt';
 
   @IsIn(['asc', 'desc'], {
     message:
@@ -85,11 +81,11 @@ export class FindAllUsersDto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => RelationsUserDto)
-  relations?: RelationsUserDto;
+  @Type(() => RelationsAlbumDto)
+  relations?: RelationsAlbumDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => FieldsUserDto)
-  fields?: FieldsUserDto;
+  @Type(() => FieldsAlbumDto)
+  fields?: FieldsAlbumDto;
 }

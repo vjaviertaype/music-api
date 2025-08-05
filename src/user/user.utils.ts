@@ -5,8 +5,8 @@ import {
   buildPaginationQuery,
 } from 'prisma/lib/prisma-query-builder';
 import { findOneUserDto } from './dto/find-one-user.dto';
-import { FieldsDto } from './dto/fields.dto';
-import { RelationsDto } from './dto/relations.dto';
+import { FieldsUserDto } from './dto/fields-user.dto';
+import { RelationsUserDto } from './dto/relations-user.dto';
 
 export function buildUserWhere(filter: FindAllUsersDto): Prisma.UserWhereInput {
   const { email, name, isActive, createdAfter, createdBefore } = filter;
@@ -27,7 +27,7 @@ export function buildUserWhere(filter: FindAllUsersDto): Prisma.UserWhereInput {
   return where;
 }
 
-export function buildUserSelect(fields?: FieldsDto): Prisma.UserSelect {
+export function buildUserSelect(fields?: FieldsUserDto): Prisma.UserSelect {
   return {
     id: fields?.id ?? true,
     email: fields?.email ?? true,
@@ -39,7 +39,9 @@ export function buildUserSelect(fields?: FieldsDto): Prisma.UserSelect {
   };
 }
 
-export function buildUserInclude(relations?: RelationsDto): Prisma.UserInclude {
+export function buildUserInclude(
+  relations?: RelationsUserDto,
+): Prisma.UserInclude {
   return {
     albums: relations?.albums ?? false,
     subscriptions: relations?.subscriptions ?? false,

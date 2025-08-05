@@ -1,17 +1,19 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, MaxLength, IsString } from 'class-validator';
 
 export class LoginDto {
   @IsEmail(
     {},
     {
-      message:
-        'el campo "email" deberia tener un formado de correo electronico',
+      message: 'El campo "email" debe tener un formato válido',
     },
   )
-  @IsNotEmpty({ message: 'el campo "email" no debe ser una cadena vacia' })
+  @IsNotEmpty({ message: 'El campo "email" es obligatorio' })
+  @MaxLength(255, {
+    message: 'El campo "email" no puede superar los 255 caracteres',
+  })
   email: string;
 
-  @IsString({ message: 'el campo "password" deberia ser una cadena de texto' })
-  @IsNotEmpty({ message: 'el campo "password" no debe ser una cadena vacia' })
+  @IsString({ message: 'El campo "password" debe ser una cadena de texto' })
+  @IsNotEmpty({ message: 'El campo "password" es obligatorio' })
   password: string;
 }

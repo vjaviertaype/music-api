@@ -1,10 +1,12 @@
 import { Role } from '@prisma/client';
 import {
-  IsAlpha,
   IsEmail,
   IsEnum,
+  IsNotEmpty,
   IsString,
   IsStrongPassword,
+  Matches,
+  MaxLength,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -17,18 +19,20 @@ export class RegisterDto {
   })
   password: string;
 
-  @IsEmail(
-    {},
-    {
-      message:
-        'el campo "email" deberia tener un formato de correo electronico',
-    },
-  )
+  @IsEmail(undefined, {
+    message: 'el campo "email" deberia tener un formato de correo electronico',
+  })
+  @IsNotEmpty({ message: 'el campo "email" es obligatorio' })
+  @MaxLength(255, {
+    message: 'el campo "email" no puede superar los 255 caracteres',
+  })
   email: string;
 
-  @IsAlpha('es-ES', {
-    message: 'el campo "name" deberia contener solo caracteres alfabeticos',
+  @Matches(/^[\p{L}\p{M}\s'-]+$/u, {
+    message:
+      'el campo "name" deberia contener solo guiones, apóstofres, letras y espacios',
   })
+  @IsNotEmpty({ message: 'el campo "name" es obligatorio' })
   @IsString({ message: 'el campo "name" deberia ser una cadena de caracteres' })
   name: string;
 
@@ -37,5 +41,5 @@ export class RegisterDto {
       .join(', ')
       .replace(/, ([^,]*)$/, ' o $1')}`,
   })
-  role?: Role = Role.USER;
+  role: Role = Role.USER;
 }
